@@ -1,4 +1,3 @@
-import math
 import copy
 
 
@@ -504,17 +503,23 @@ class FloatingPoint:
             elif binary_compare_more(first_exponent, second_exponent):
                 comma_index = 1
                 while not binary_compare_equal(first_exponent, second_exponent):
-                    first_exponent = binary_difference(first_exponent, [1])
-                    first_mantissa[comma_index] = first_mantissa[comma_index+1]
-                    first_mantissa[comma_index+1] = ","
-                    comma_index+=1
+                    if len(first_mantissa) -1 > comma_index:
+                        first_exponent = binary_difference(first_exponent, [1])
+                        first_mantissa[comma_index] = first_mantissa[comma_index+1]
+                        first_mantissa[comma_index+1] = ","
+                        comma_index+=1
+                    else:
+                        first_mantissa.append(0)
             else:
                 comma_index = 1
                 while not binary_compare_equal(first_exponent, second_exponent):
-                    second_exponent = binary_difference(second_exponent, [1])
-                    second_mantissa[comma_index] = second_mantissa[comma_index + 1]
-                    second_mantissa[comma_index + 1] = ","
-                    comma_index+=1
+                    if len(second_mantissa) - 1 > comma_index:
+                        second_exponent = binary_difference(second_exponent, [1])
+                        second_mantissa[comma_index] = second_mantissa[comma_index + 1]
+                        second_mantissa[comma_index + 1] = ","
+                        comma_index += 1
+                    else:
+                        second_mantissa.append(0)
 
     def __sub__(self, other):
         other: FloatingPoint
@@ -572,4 +577,3 @@ class FloatingPoint:
                     second_mantissa[comma_index] = second_mantissa[comma_index + 1]
                     second_mantissa[comma_index + 1] = ","
                     comma_index += 1
-
