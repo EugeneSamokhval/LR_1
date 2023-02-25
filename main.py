@@ -57,22 +57,19 @@ def main():
             second_binary_pos = Class.BinaryInteger(second_num)
             first_binary_neg = Class.BinaryInteger(-first_num)
             second_binary_neg = Class.BinaryInteger(-second_num)
-            second_neg_copy = copy.deepcopy(second_binary_neg)
-            first_neg_copy = copy.deepcopy(first_binary_neg)
-            first_pos_copy = copy.deepcopy(first_binary_pos)
             print(first_binary_pos.get_straight_form(), "\n", first_num, "\n", second_binary_pos.get_straight_form(),
                   "\n", second_num)
             operation = input("Input operation: sum, sub, mult, div\n")
             if operation == "sum":
-                print(binary_signed_to_int(first_binary_pos+second_binary_pos))
-                print(binary_signed_to_int(first_binary_pos+second_binary_neg))
-                print(binary_signed_to_int(first_binary_neg+second_binary_pos))
-                print(binary_signed_to_int(first_neg_copy+second_neg_copy))
+                print(binary_signed_to_int(copy.deepcopy(first_binary_pos)+copy.deepcopy(second_binary_pos)))
+                print(binary_signed_to_int(copy.deepcopy(first_binary_pos)+copy.deepcopy(second_binary_neg)))
+                print(binary_signed_to_int(copy.deepcopy(first_binary_neg)+copy.deepcopy(second_binary_pos)))
+                print(binary_signed_to_int(copy.deepcopy(first_binary_neg)+copy.deepcopy(second_binary_neg)))
             elif operation == "sub":
-                print(binary_signed_to_int(first_binary_pos-second_binary_pos))
-                print(binary_signed_to_int(first_binary_neg-second_binary_pos))
-                print(binary_signed_to_int(first_pos_copy-second_neg_copy))
-                print(binary_signed_to_int(first_binary_neg-second_binary_neg))
+                print(binary_signed_to_int(copy.deepcopy(first_binary_pos)-copy.deepcopy(second_binary_pos)))
+                print(binary_signed_to_int(copy.deepcopy(first_binary_neg)-copy.deepcopy(second_binary_pos)))
+                print(binary_signed_to_int(copy.deepcopy(first_binary_pos)-copy.deepcopy(second_binary_neg)))
+                print(binary_signed_to_int(copy.deepcopy(first_binary_neg)-copy.deepcopy(second_binary_neg)))
             elif operation == "mult":
                 print(binary_signed_to_int(first_binary_pos*second_binary_pos))
             elif operation == "div":
