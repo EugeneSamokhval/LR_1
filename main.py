@@ -1,189 +1,100 @@
-import math
+import Class
 import copy
 
 
-def binary_addition(first_binary: list, second_binary: list)->list:
-    result = []
-    first_binary.insert(0, 0)
-    in_mind = 0
-    while len(second_binary) != len(second_binary):
-        second_binary.insert(0, 0)
-    for iterator in range(len(first_binary) - 1, 0):
-        if in_mind == 0:
-            if first_binary[iterator] == 1 and second_binary[iterator] ==0:
-                result.insert(0, 1)
-            elif first_binary[iterator] == 0 and second_binary[iterator] ==1:
-                result.insert(0, 1)
-            elif first_binary[iterator] == 1 and second_binary[iterator] ==1:
-                result.insert(0, 0)
-                in_mind += 1
-            elif first_binary[iterator] == 0 and second_binary[iterator] ==0:
-                result.insert(0, 0)
+def better_visual(summ: list):
+    exponent_decimal = Class.binary_to_int(summ[2])
+    exponent_decimal -= 100
+    dot_position = summ[1].index(",")
+    while exponent_decimal != 0:
+        if exponent_decimal>0:
+            summ[1][dot_position] = summ[1][dot_position + 1]
+            summ[1][dot_position + 1] = ","
+            exponent_decimal -= 1
+            dot_position += 1
         else:
-            if first_binary[iterator] == 1 and second_binary[iterator] == 0:
-                result.insert(0, 0)
-            elif first_binary[iterator] == 0 and second_binary[iterator] == 1:
-                result.insert(0, 0)
-            elif first_binary[iterator] == 1 and second_binary[iterator] == 1:
-                result.insert(0, 1)
-            elif first_binary[iterator] == 0 and second_binary[iterator] == 0:
-                result.insert(0, 1)
-                in_mind -=1
-    return result
-
-
-def binary_difference(first_binary: list, second_binary: list):
-    result = []
-    in_mind =0
-    while len(second_binary) != len(first_binary):
-        second_binary.insert(0, 0)
-    for iterator in range(len(first_binary)-1, 0):
-        if iterator != 0:
-            if in_mind != 0:
-                if first_binary[iterator] == 1 and second_binary[iterator] == 1:
-                    result.insert(0, 0)
-                elif first_binary[iterator] == 0 and second_binary[iterator] == 0:
-                    result.insert(0, 0)
-                elif first_binary[iterator] == 0 and second_binary[iterator] == 1:
-                    result.insert(0, 0)
-                    in_mind += 1
-                elif first_binary[iterator] == 1 and second_binary[iterator] == 0:
-                    result.insert(0, 0)
-                    in_mind -= 1
+            if dot_position > 0:
+                summ[1][dot_position] = summ[1][dot_position - 1]
+                summ[1][dot_position - 1] = ","
+                exponent_decimal += 1
+                dot_position -= 1
             else:
-                if first_binary[iterator] == 1 and second_binary[iterator] == 1:
-                    result.insert(0, 0)
-                elif first_binary[iterator] == 1 and second_binary[iterator] == 0:
-                    result.insert(0, 1)
-                elif first_binary[iterator] == 0 and second_binary[iterator] == 1:
-                    result.insert(0, 1)
-                    in_mind +=1
-                elif first_binary[iterator] == 0 and second_binary[iterator] == 0:
-                    result.insert(0, 0)
-        else:
-            if in_mind == 0:
-                break
-            else:
-                for dec in range(0, in_mind):
-                    result.pop(dec)
-        return result
+                summ[1].insert(dot_position+1, 0)
+                exponent_decimal += 1
+    iterator = 0
+    integer_part_binary = []
+    float_part_binary = []
+    while summ[1][iterator] != ",":
+        integer_part_binary.append(summ[1][iterator])
+        iterator += 1
+    iterator+=1
+    while iterator < len(summ[1]):
+        float_part_binary.append(summ[1][iterator])
+        iterator += 1
+    integer_part = Class.binary_to_int(integer_part_binary)
+    float_part = Class.float_to_int(float_part_binary)
+    print(integer_part_binary, ",", float_part_binary, "\n", integer_part + float_part, end="\n")
 
 
-def binary_multiplication(first_binary, second_binary):
-    list_for_summ = []
-    for rev_iterator in range(len(second_binary)-1, 0):
-        if second_binary[rev_iterator] == 1:
-            temp_binary = copy.copy(first_binary)
-            for shift in range(0, len(second_binary)-1-rev_iterator):
-                temp_binary.append(0)
-            list_for_summ.append(temp_binary)
-    result = copy.copy(list_for_summ[len(list_for_summ)-1])
-    for iterator in range(len(list_for_summ)-2, 0):
-        result=binary_addition(result, list_for_summ[iterator])
-    return result
-
-
-def binary_compare_more(first_binary, second_binary)->bool:
-    if len(first_binary) > len(second_binary):
-        return True
-    elif len(first_binary) < len(second_binary):
-        return False
-    else:
-        for iteration in range(0, len(first_binary)-1):
-            if first_binary[iteration] == 1 and second_binary[iteration] == 0:
-                return True
-            elif first_binary[iteration] == 0 and second_binary[iteration] == 1:
-                return False
-
-
-def binary_division(first_binary, second_binary):
-    result = []
-    first_binary: list
-    temp_subst = []
-    signs_after_dot = 0
-    while signs_after_dot < 5:
-        if binary_compare_more(temp_subst, second_binary):
-            first_binary.remove(temp_subst)
-            temp_subst = binary_difference(temp_subst, second_binary)
-            result.append(1)
-        elif len(second_binary) >= len(first_binary):
-            while len(second_binary) >= len(first_binary):
-                first_binary.append(0)
-                if result.count(",") == 0:
-                    result.append(",")
-                signs_after_dot += 1
-        else:
-            count = 0
-            while not binary_compare_more(temp_subst, second_binary):
-                temp_subst.append(first_binary[count])
-                count+=1
-    return result
-
-
-def int_to_bin(number: int):
-    matrix = []
-    minus_sign = True
-    if number > 0:
-        minus_sign = False
-    else:
-        number+=-1
-    while number > 0:
-        matrix.append(number % 2)
-        number = number/2
-    rev_ver = copy.copy(matrix)
-    if minus_sign:
-        for sign in rev_ver:
-            if sign == 0:
-                sign = 1
-            else:
-                sign = 0
-    output = (minus_sign, matrix, rev_ver)
+def binary_signed_to_int(binary: list)->int:
+    print(binary)
+    sign = binary[0]
+    binary.pop(0)
+    output = Class.binary_to_int(binary)
+    if sign == 1:
+        output = output*(-1)
     return output
 
 
-class BinaryInteger:
-    def __init__(self, number: int):
-        binary_conversion = int_to_bin(number)
-        self.__decimal_number = number
-        self.__binary_straight = binary_conversion[1]
-        if binary_conversion[0]:
-            self.__binary_reversed = copy.copy(binary_conversion[2])
-        else:
-            self.__binary_reversed = copy.copy(self.__binary_straight)
-        if not binary_conversion[0]:
-            self.__binary_add = self.__binary_straight
-        else:
-            operating = copy.copy(binary_conversion[2])
-            operating: list
-            self.__binary_add = binary_addition(operating, [1])
-        self.__sign = binary_conversion[0]
+def main():
+    while True:
+        print("Input type:int or float. To exit print exit\n")
+        command = input()
+        if command == "int":
+            first_num = int(input("Input first number\n"))
+            second_num = int(input("Input second number\n"))
+            first_binary_pos = Class.BinaryInteger(first_num)
+            second_binary_pos = Class.BinaryInteger(second_num)
+            first_binary_neg = Class.BinaryInteger(-first_num)
+            second_binary_neg = Class.BinaryInteger(-second_num)
+            second_neg_copy = copy.deepcopy(second_binary_neg)
+            first_neg_copy = copy.deepcopy(first_binary_neg)
+            first_pos_copy = copy.deepcopy(first_binary_pos)
+            print(first_binary_pos.get_straight_form(), "\n", first_num, "\n", second_binary_pos.get_straight_form(),
+                  "\n", second_num)
+            operation = input("Input operation: sum, sub, mult, div\n")
+            if operation == "sum":
+                print(binary_signed_to_int(first_binary_pos+second_binary_pos))
+                print(binary_signed_to_int(first_binary_pos+second_binary_neg))
+                print(binary_signed_to_int(first_binary_neg+second_binary_pos))
+                print(binary_signed_to_int(first_neg_copy+second_neg_copy))
+            elif operation == "sub":
+                print(binary_signed_to_int(first_binary_pos-second_binary_pos))
+                print(binary_signed_to_int(first_binary_neg-second_binary_pos))
+                print(binary_signed_to_int(first_pos_copy-second_neg_copy))
+                print(binary_signed_to_int(first_binary_neg-second_binary_neg))
+            elif operation == "mult":
+                print(binary_signed_to_int(first_binary_pos*second_binary_pos))
+            elif operation == "div":
+                print(binary_signed_to_int(first_binary_pos/second_binary_pos))
 
-    def get_straight_form(self)->list:
-        return self.__binary_straight
-
-    def get_sign(self)->bool:
-        return self.__sign
-
-    def __add__(self, other):
-        self: BinaryInteger
-        if self.get_sign() and other.get_sign:
-            result = [1]
-            if binary_compare_more(self.get_straight_form(), other.get_straight_form()):
-                result_raw = binary_addition(self.get_straight_form(), other.get_straight_form())
-                for number in result_raw:
-                    result.append(number)
-            else:
-                result_raw = binary_addition(other.get_straight_form(), self.get_straight_form())
-                for number in result_raw:
-                    result.append(number)
-        elif self.get_sign() and not other.get_sign:
-            if binary_compare_more(self.get_straight_form(), other.get_straight_form()):
-                result = [1]
-                raw_result = binary_difference(self.get_straight_form(), other.get_straight_form())
-                for number in raw_result:
-                    result.append(number)
+        elif command == "float":
+            first_number = float(input("Input first number\n"))
+            second_number = float(input("Input second number\n"))
+            first_binary_pos = Class.FloatingPoint(first_number)
+            second_binary_pos = Class.FloatingPoint(second_number)
+            print(first_binary_pos.get_sign(), first_binary_pos.get_exponent(), first_binary_pos.get_mantissa(), "\n",
+                  second_binary_pos.get_sign(), second_binary_pos.get_exponent(), second_binary_pos.get_mantissa())
+            operation = input("Input operation: sum, sub\n")
+            if operation == "sum":
+                pos_pos = first_binary_pos+second_binary_pos
+                better_visual(pos_pos)
+            elif operation == "sub":
+                sub = first_binary_pos - second_binary_pos
+                better_visual(sub)
+        elif command == "exit":
+            break
 
 
-
-
-
+if __name__ == "__main__":
+    main()
